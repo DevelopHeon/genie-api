@@ -2,23 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.study.genieapi.artist.repository.ArtistMapper">
-    <select id="getCount" resultType="int">
-        select count(*) from artist
-    </select>
-    <select id="getSearchCount" parameterType="string" resultType="int">
-        select count(*) from artist
-        where artistName LIKE '%'||#{searchParam}||'%'
-    </select>
-    <select id="findAll" resultType="Artist">
+    <select id="findAll" resultType="Artist" parameterType="string">
         select * from artist
-        order by artistId DESC
-        limit #{pageSize} offset #{offset}
-    </select>
-    <select id="getSearchAll" parameterType="string" resultType="Artist">
-        select * from artist
+     <if test="searchParam != null">
         where artistName LIKE '%'||#{searchParam}||'%'
+     </if>
         order by artistId DESC
     </select>
+
     <select id="findById" parameterType="int" resultType="Artist">
         select * from artist
         where artistId = #{id}

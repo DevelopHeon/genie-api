@@ -1,5 +1,6 @@
 package com.hh.study.genieapi.artist.service;
 
+import com.github.pagehelper.PageHelper;
 import com.hh.study.genieapi.artist.dto.ArtistDto;
 import com.hh.study.genieapi.artist.repository.ArtistMapper;
 import com.hh.study.genieapi.common.error.ArtistNotFoundException;
@@ -7,8 +8,6 @@ import com.hh.study.genieapi.entity.Artist;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,14 +21,11 @@ public class ArtistService {
     private final ArtistMapper artistMapper;
 
     private final ModelMapper modelMapper;
+    private final static int PAGE_SIZE=5;
 
-    public List<Artist> findAll(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber(), 5);
-        return artistMapper.findAll(pageable);
-    }
-
-    public int getCount() {
-        return artistMapper.getCount();
+    public List<Artist> findAll(String searchParam,int pageNum) {
+        PageHelper.startPage(pageNum, PAGE_SIZE);
+        return artistMapper.findAll(searchParam);
     }
 
     public int save(ArtistDto artistDto) {
@@ -60,14 +56,6 @@ public class ArtistService {
     public void deleteArtist(Integer id) {
         findById(id);
         artistMapper.deleteArtist(id);
-    }
-
-    public int getSearchCount(String searchParam) {
-        return artistMapper.getSearchCount(searchParam);
-    }
-
-    public List<Artist> findSearchAll(String searchParam) {
-        return artistMapper.getSearchAll(searchParam);
     }
 
 }

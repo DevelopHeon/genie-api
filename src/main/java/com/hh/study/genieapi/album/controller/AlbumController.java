@@ -31,8 +31,6 @@ public class AlbumController {
 
     @GetMapping("/albums/artist")
     public ResponseEntity searchArtist(@RequestParam String artistName){
-        int count = artistService.getSearchCount(artistName);
-        List<Artist> content = artistService.findSearchAll(artistName);
         return null;
     }
 

@@ -1,12 +1,11 @@
 package com.hh.study.genieapi.artist.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.hh.study.genieapi.artist.dto.ArtistDto;
 import com.hh.study.genieapi.artist.service.ArtistService;
 import com.hh.study.genieapi.entity.Artist;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/genie")
 public class ArtistController {
-
     private final ArtistService artistService;
-
     @GetMapping("/artists")
     public ResponseEntity quertArtist(@RequestParam(required = false) String searchParam,
-                                    Pageable pageable){
-        int count;
-        List<Artist> content;
-        if(searchParam != null){
-            count = artistService.getSearchCount(searchParam);
-            content = artistService.findSearchAll(searchParam);
-        }else{
-            count = artistService.getCount();
-            content = artistService.findAll(pageable);
-        }
+                                      @RequestParam(required = false, defaultValue = "1") int pageNum){
+        List<Artist> content = artistService.findAll(searchParam, pageNum);
 
-        PageImpl<Artist> artists = new PageImpl<>(content, pageable, count);
+        PageInfo<Artist> artists = new PageInfo<>(content, 10);
         return ResponseEntity.ok(artists);
     }
 
