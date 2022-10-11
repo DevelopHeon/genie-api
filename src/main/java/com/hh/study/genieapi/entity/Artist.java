@@ -1,6 +1,8 @@
 package com.hh.study.genieapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +18,8 @@ public class Artist {
     private String agency;
     private String country;
     private String artistExplanation;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifyDate;
 }

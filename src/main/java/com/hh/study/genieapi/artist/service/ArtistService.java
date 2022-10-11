@@ -23,7 +23,7 @@ public class ArtistService {
     private final ModelMapper modelMapper;
     private final static int PAGE_SIZE=5;
 
-    public List<Artist> findAll(String searchParam,int pageNum) {
+    public List<Artist> findAll(String searchParam, int pageNum) {
         PageHelper.startPage(pageNum, PAGE_SIZE);
         return artistMapper.findAll(searchParam);
     }

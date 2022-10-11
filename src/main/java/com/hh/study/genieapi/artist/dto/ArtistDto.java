@@ -19,5 +19,4 @@ public class ArtistDto {
     @NotEmpty(message = "국적은 필수 입력 값입니다.")
     private String country;
     private String artistExplanation;
-    private LocalDateTime modifyDate;
 }

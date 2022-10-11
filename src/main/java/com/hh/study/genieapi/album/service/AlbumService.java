@@ -3,7 +3,9 @@ package com.hh.study.genieapi.album.service;
 import com.hh.study.genieapi.album.dto.AlbumDto;
 import com.hh.study.genieapi.album.dto.MusicDto;
 import com.hh.study.genieapi.album.repository.AlbumMapper;
+import com.hh.study.genieapi.artist.service.ArtistService;
 import com.hh.study.genieapi.entity.Album;
+import com.hh.study.genieapi.entity.Artist;
 import com.hh.study.genieapi.entity.Music;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class AlbumService {
-
+    private final ArtistService artistService;
     private final AlbumMapper albumMapper;
     private final ModelMapper modelMapper;
 
@@ -42,5 +44,9 @@ public class AlbumService {
             result.add(music);
         }
         albumMapper.insertMusics(musicList);
+    }
+
+    public List<Artist> searchArtist(String searchParam, int pageNum) {
+        return artistService.findAll(searchParam, pageNum);
     }
 }

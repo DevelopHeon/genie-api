@@ -1,5 +1,6 @@
 package com.hh.study.genieapi.album.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.hh.study.genieapi.album.dto.AlbumDto;
 import com.hh.study.genieapi.album.service.AlbumService;
 import com.hh.study.genieapi.artist.service.ArtistService;
@@ -19,7 +20,6 @@ import java.util.List;
 public class AlbumController {
 
     private final AlbumService albumService;
-    private final ArtistService artistService;
 
     @GetMapping("/albums")
     public ResponseEntity quertAlbums(){
@@ -30,8 +30,12 @@ public class AlbumController {
     }
 
     @GetMapping("/albums/artist")
-    public ResponseEntity searchArtist(@RequestParam String artistName){
-        return null;
+    public ResponseEntity searchArtist(@RequestParam String searchParam,
+                                       @RequestParam(required = false, defaultValue = "1") int pageNum) {
+        List<Artist> content = albumService.searchArtist(searchParam, pageNum);
+
+        PageInfo<Artist> artists = new PageInfo<>(content, 10);
+        return ResponseEntity.ok(artists);
     }
 
     @PostMapping("/albums")
