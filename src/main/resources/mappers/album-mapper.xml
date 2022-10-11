@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.study.genieapi.album.repository.AlbumMapper">
+    <select id="getCount" resultType="int">
+        select count(*) from album
+    </select>
+
+    <select id="findAll" resultType="Album">
+        select b.artistName, a.albumTitle, a.releaseDate,
+               a.genre, b.artistExplanation, b.artistAuthor,
+               b.createDate
+               from album a
+        left join artist b on a.artistId = b.artistId;
+    </select>
+
+    <insert id="createAlbums" parameterType="Album" useGeneratedKeys="true" keyProperty="albumId">
+        insert into album
+        (artistId, albumTitle, releaseDate, genre, createDate, albumAuthor)
+        values
+            (#{artistId}, #{albumTitle}, #{releaseDate}, #{genre}, NOW(), 'sony');
+    </insert>
+    <insert id="insertMusics" parameterType="Music">
+        insert into music
+        (albumId, orders, musicTitle, playTime, status)
+        values
+            (#{albumId}, #{orders}, #{musicTitle}, #{playTime}, #{status});
+    </insert>
+</mapper>
