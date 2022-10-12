@@ -14,6 +14,7 @@ import java.util.List;
 @Builder @ToString
 public class Album {
 
+    private Integer rnum;
     private Integer albumId;
     private Integer artistId;
     private String artistName;

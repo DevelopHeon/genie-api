@@ -39,6 +39,7 @@ public class AlbumService {
 
         if(albumDto.getMusicDtoList() != null){
             List<Music> musicList = new ArrayList<>();
+
             for(MusicDto m : albumDto.getMusicDtoList()){
                 Music music = modelMapper.map(m, Music.class);
                 music.setAlbumId(album.getAlbumId());

@@ -7,7 +7,7 @@
     </select>
 
     <select id="findAll" resultType="Album">
-        select a.albumId, b.artistId, b.artistName, a.albumTitle,
+        select rownum() rnum,a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
                b.createDate
                from album a
@@ -15,12 +15,14 @@
         <if test="albumSearchParam != null">
             where albumTitle LIKE '%'||#{albumSearchParam}||'%'
         </if>
+        order by albumId desc
     </select>
     <select id="searchArtist" resultType="Artist" parameterType="string">
-        select * from artist
+        select rownum() rnum, * from artist
         <if test="searchParam != null">
             where artistName LIKE '%'||#{searchParam}||'%'
         </if>
+        order by artistId desc
     </select>
 
     <insert id="createAlbums" parameterType="Album" useGeneratedKeys="true" keyProperty="albumId">
@@ -65,18 +67,18 @@
     <update id="updateMusics" parameterType="java.util.List">
         <foreach collection="list" item="item" separator=",">
             merge into music
-                using dual
-                on (musicId = #{item.musicId})
-                when matched then
-                    update set albumId = #{item.albumId},
-                               musicTitle = #{item.musicTitle},
-                               playTime = #{item.playTime},
-                               status = #{item.status}
-                when not matched then
-                    insert into music
-                        (albumId, musicTitle, playTime, status)
-                    values
-                        (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status});
+            using dual
+            on (musicId = #{item.musicId})
+            when matched then
+            update set albumId = #{item.albumId},
+            musicTitle = #{item.musicTitle},
+            playTime = #{item.playTime},
+            status = #{item.status}
+            when not matched then
+            insert into music
+            (albumId, musicTitle, playTime, status)
+            values
+            (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status});
         </foreach>
     </update>
     <delete id="deleteAlbums" parameterType="int">

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder @ToString
 public class Artist {
 
+    private Integer rnum;
     private Integer artistId;
     private String artistAuthor;
     private String artistName;

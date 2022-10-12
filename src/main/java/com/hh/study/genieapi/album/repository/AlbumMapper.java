@@ -24,7 +24,7 @@ public interface AlbumMapper {
 
     void updateAlbums(Album album);
 
-    void updateMusics(List<Music> musicList);
+    void updateMusics(List<Music> music);
 
     void deleteAlbums(Integer id);
 }

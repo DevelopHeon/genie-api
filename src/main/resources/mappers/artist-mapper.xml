@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.study.genieapi.artist.repository.ArtistMapper">
     <select id="findAll" resultType="Artist" parameterType="string">
-        select * from artist
+        select rownum() rnum, * from artist
      <if test="searchParam != null">
         where artistName LIKE '%'||#{searchParam}||'%'
      </if>
