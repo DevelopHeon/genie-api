@@ -32,7 +32,8 @@
         where artistId = #{artistId}
     </update>
     <delete id="deleteArtist" parameterType="int">
-        delete from ARTIST
+        delete
+        from ARTIST
         where artistId = #{id}
     </delete>
 </mapper>

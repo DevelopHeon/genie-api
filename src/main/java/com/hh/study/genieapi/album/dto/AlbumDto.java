@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,14 +16,13 @@ import java.util.List;
 @Builder
 public class AlbumDto {
 
-    @NotEmpty(message = "아티스트명은 필수 값입니다.")
-    private String artistName;
+    private Integer artistId;
     @NotEmpty(message = "앨범명은 필수 값입니다.")
     private String albumTitle;
-    @NotEmpty(message = "발매일은 필수 값입니다.")
+    @NotNull
     private LocalDate releaseDate;
-    private String artistExplanation;
+    private String albumExplanation;
     private String genre;
     private String albumAuthor;
-    private List<MusicDto> musicDtos;
+    private List<MusicDto> musicDtoList;
 }

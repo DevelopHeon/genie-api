@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 public class MusicDto {
 
-    private Integer order;
+    private Integer musicId;
     @NotEmpty(message = "음원명은 필수 값입니다.")
     private String musicTitle;
     @NotEmpty(message = "재생시간은 필수 값입니다.")

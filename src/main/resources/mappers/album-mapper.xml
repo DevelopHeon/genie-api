@@ -7,23 +7,80 @@
     </select>
 
     <select id="findAll" resultType="Album">
-        select b.artistName, a.albumTitle, a.releaseDate,
-               a.genre, b.artistExplanation, b.artistAuthor,
+        select a.albumId, b.artistId, b.artistName, a.albumTitle,
+               a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
                b.createDate
                from album a
-        left join artist b on a.artistId = b.artistId;
+        join artist b on a.artistId = b.artistId
+        <if test="albumSearchParam != null">
+            where albumTitle LIKE '%'||#{albumSearchParam}||'%'
+        </if>
+    </select>
+    <select id="searchArtist" resultType="Artist" parameterType="string">
+        select * from artist
+        <if test="searchParam != null">
+            where artistName LIKE '%'||#{searchParam}||'%'
+        </if>
     </select>
 
     <insert id="createAlbums" parameterType="Album" useGeneratedKeys="true" keyProperty="albumId">
         insert into album
-        (artistId, albumTitle, releaseDate, genre, createDate, albumAuthor)
+        (artistId, albumTitle, releaseDate, genre, albumExplanation, createDate, albumAuthor)
         values
-            (#{artistId}, #{albumTitle}, #{releaseDate}, #{genre}, NOW(), 'sony');
+            (#{artistId}, #{albumTitle}, #{releaseDate}, #{genre}, #{albumExplanation}, NOW(), 'sony');
     </insert>
-    <insert id="insertMusics" parameterType="Music">
+
+    <insert id="insertMusics" parameterType="java.util.List">
         insert into music
-        (albumId, orders, musicTitle, playTime, status)
+        (albumId, musicTitle, playTime, status)
         values
-            (#{albumId}, #{orders}, #{musicTitle}, #{playTime}, #{status});
+        <foreach collection="list" item="item" separator=",">
+            (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status})
+        </foreach>
     </insert>
+
+    <select id="findByIdToAlbum" resultType="Album" parameterType="int">
+        select a.albumId, b.artistId, b.artistName, a.albumTitle,
+               a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
+               b.createDate
+        from album a
+                 join artist b on a.artistId = b.artistId
+        where a.albumId = #{id}
+    </select>
+    <select id="findByIdToMusic" resultType="Music" parameterType="int">
+        select * from music
+        where albumId = #{id}
+    </select>
+
+    <update id="updateAlbums" parameterType="Album">
+        update album
+            set artistId = #{artistId},
+                albumTitle = #{albumTitle},
+                releaseDate = #{releaseDate},
+                genre = #{genre},
+                albumExplanation = #{albumExplanation},
+                modifyDate = now()
+        where albumId = #{albumId}
+    </update>
+    <update id="updateMusics" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=",">
+            merge into music
+                using dual
+                on (musicId = #{item.musicId})
+                when matched then
+                    update set albumId = #{item.albumId},
+                               musicTitle = #{item.musicTitle},
+                               playTime = #{item.playTime},
+                               status = #{item.status}
+                when not matched then
+                    insert into music
+                        (albumId, musicTitle, playTime, status)
+                    values
+                        (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status});
+        </foreach>
+    </update>
+    <delete id="deleteAlbums" parameterType="int">
+        delete from album
+        where albumId = #{id}
+    </delete>
 </mapper>

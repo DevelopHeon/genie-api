@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,13 +16,15 @@ public class Album {
 
     private Integer albumId;
     private Integer artistId;
+    private String artistName;
     private String albumTitle;
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
     private String genre;
+    private String albumExplanation;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifyDate;
     private String albumAuthor;
+    private List<Music> musicList;
 }

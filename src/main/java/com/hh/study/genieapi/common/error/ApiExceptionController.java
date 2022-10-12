@@ -12,4 +12,9 @@ public class ApiExceptionController {
     protected ResponseEntity handleArtistNotFoundException(ArtistNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+
+    @ExceptionHandler(AlbumNotFoundException.class)
+    protected ResponseEntity handleAlbumNotFoundException(AlbumNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
 }

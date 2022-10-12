@@ -19,15 +19,14 @@ CREATE TABLE ALBUM(
                       createDate TIMESTAMP DEFAULT NOW(),
                       modifyDate TIMESTAMP,
                       albumAuthor VARCHAR(255) NOT NULL,
-                      CONSTRAINT FK_ALBUM_TO_ARTIST FOREIGN KEY(artistId) REFERENCES ARTIST(artistId)
+                      CONSTRAINT FK_ALBUM_TO_ARTIST FOREIGN KEY(artistId) REFERENCES ARTIST(artistId) ON DELETE CASCADE
 );
 
 CREATE TABLE MUSIC(
                       musicId INTEGER primary key AUTO_INCREMENT,
                       albumId INTEGER NOT NULL ,
-                      orders INTEGER NOT NULL,
                       musicTitle VARCHAR(255) NOT NULL ,
                       playTime VARCHAR(255) NOT NULL,
                       status boolean NOT NULL,
-                      CONSTRAINT FK_MUSIC_TO_ALBUM FOREIGN KEY(albumId) REFERENCES ALBUM(albumId)
+                      CONSTRAINT FK_MUSIC_TO_ALBUM FOREIGN KEY(albumId) REFERENCES ALBUM(albumId) ON DELETE CASCADE
 );

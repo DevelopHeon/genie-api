@@ -1,18 +1,30 @@
 package com.hh.study.genieapi.album.repository;
 
-import com.hh.study.genieapi.album.dto.MusicDto;
 import com.hh.study.genieapi.entity.Album;
+import com.hh.study.genieapi.entity.Artist;
+import com.hh.study.genieapi.entity.Music;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface AlbumMapper {
-    int getCount();
-
-    List<Album> findAll();
+    List<Album> findAll(String albumSearchParam);
 
     void createAlbums(Album album);
 
-    void insertMusics(List<MusicDto> musicList);
+    void insertMusics(List<Music> musicList);
+
+    List<Artist> searchArtist(String searchParam);
+
+    Optional<Album> findByIdToAlbum(Integer id);
+
+    List<Music> findByIdToMusic(Integer id);
+
+    void updateAlbums(Album album);
+
+    void updateMusics(List<Music> musicList);
+
+    void deleteAlbums(Integer id);
 }

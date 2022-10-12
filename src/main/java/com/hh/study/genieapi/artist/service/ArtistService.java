@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 @Slf4j
 public class ArtistService {
@@ -23,6 +25,7 @@ public class ArtistService {
     private final ModelMapper modelMapper;
     private final static int PAGE_SIZE=5;
 
+    @Transactional(readOnly = true)
     public List<Artist> findAll(String searchParam, int pageNum) {
         PageHelper.startPage(pageNum, PAGE_SIZE);
         return artistMapper.findAll(searchParam);
@@ -36,6 +39,7 @@ public class ArtistService {
         return artist.getArtistId();
     }
 
+    @Transactional(readOnly = true)
     public Artist findById(Integer id) {
         Optional<Artist> optionalArtist = artistMapper.findById(id);
         if(!optionalArtist.isPresent()){
