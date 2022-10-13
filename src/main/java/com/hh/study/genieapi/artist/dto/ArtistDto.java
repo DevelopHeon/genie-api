@@ -18,7 +18,7 @@ public class ArtistDto {
     @NotNull
     private LocalDate artistBirth;
     private String agency;
-    @NotEmpty(message = "국적은 필수 입력 값입니다.")
+    @NotBlank(message = "국적은 필수 입력 값입니다.")
     private String country;
     private String artistExplanation;
 }

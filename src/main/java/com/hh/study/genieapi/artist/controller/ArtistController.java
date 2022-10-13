@@ -7,6 +7,7 @@ import com.hh.study.genieapi.artist.service.ArtistService;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class ArtistController {
     @PostMapping("/artists")
     public ResponseEntity createArtist(@RequestBody @Valid ArtistDto artistDto){
         int result = artistService.save(artistDto);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/artists/{id}")
