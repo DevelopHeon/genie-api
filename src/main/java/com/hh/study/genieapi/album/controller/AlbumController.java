@@ -30,7 +30,7 @@ public class AlbumController {
     @GetMapping("/albums/artists")
     public ResponseEntity searchArtist(SearchDto artistSerachDto){
         List<Artist> content = albumService.searchArtist(artistSerachDto);
-        PageInfo<Artist> artists = new PageInfo<>(content);
+        PageInfo<Artist> artists = new PageInfo<>(content, 10);
         return ResponseEntity.ok(artists);
     }
 

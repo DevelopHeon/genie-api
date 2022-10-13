@@ -37,18 +37,10 @@ public class AlbumService {
         Album album = modelMapper.map(albumDto, Album.class);
         albumMapper.createAlbums(album);
 
-        System.out.println("result "+ album.getAlbumId());
         if(albumDto.getMusicDtoList() != null){
-            List<Music> musicList = new ArrayList<>();
-
-            for(MusicDto m : albumDto.getMusicDtoList()){
-                Music music = modelMapper.map(m, Music.class);
-                music.setAlbumId(album.getAlbumId());
-                musicList.add(music);
-            }
+            List<Music> musicList = musicBilled(albumDto, album.getAlbumId());
             albumMapper.insertMusics(musicList);
         }
-
         return album.getAlbumId();
     }
 
@@ -82,19 +74,23 @@ public class AlbumService {
         if(albumDto.getMusicDtoList() != null){
             albumMapper.deleteMusics(id);
 
-            List<Music> musicList = new ArrayList<>();
-            for(MusicDto m : albumDto.getMusicDtoList()){
-                Music music = modelMapper.map(m, Music.class);
-                music.setAlbumId(id);
-                musicList.add(music);
-                log.info(music.toString());
-            }
+            List<Music> musicList = musicBilled(albumDto, id);
             albumMapper.insertMusics(musicList);
         }
     }
-
     public void deleteAlbums(Integer id) {
         findById(id);
         albumMapper.deleteAlbums(id);
     }
+
+    private List<Music> musicBilled(AlbumDto albumDto, Integer id) {
+        List<Music> musicList = new ArrayList<>();
+        for(MusicDto m : albumDto.getMusicDtoList()){
+            Music music = modelMapper.map(m, Music.class);
+            music.setAlbumId(id);
+            musicList.add(music);
+        }
+        return musicList;
+    }
+
 }
