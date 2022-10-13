@@ -1,8 +1,8 @@
-package com.hh.study.genieapi.album.repository;
+package com.hh.study.genieapi.album.mapper;
 
-import com.hh.study.genieapi.entity.Album;
-import com.hh.study.genieapi.entity.Artist;
-import com.hh.study.genieapi.entity.Music;
+import com.hh.study.genieapi.album.entity.Album;
+import com.hh.study.genieapi.artist.entity.Artist;
+import com.hh.study.genieapi.album.entity.Music;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AlbumMapper {
     List<Album> findAll(String albumSearchParam);
 
-    void createAlbums(Album album);
+    int createAlbums(Album album);
 
     void insertMusics(List<Music> musicList);
 
@@ -24,7 +24,7 @@ public interface AlbumMapper {
 
     void updateAlbums(Album album);
 
-    void updateMusics(List<Music> music);
-
     void deleteAlbums(Integer id);
+
+    void deleteMusics(Integer id);
 }

@@ -1,4 +1,4 @@
-package com.hh.study.genieapi.entity;
+package com.hh.study.genieapi.album.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

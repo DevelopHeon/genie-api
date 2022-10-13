@@ -25,6 +25,7 @@ CREATE TABLE ALBUM(
 CREATE TABLE MUSIC(
                       musicId INTEGER primary key AUTO_INCREMENT,
                       albumId INTEGER NOT NULL ,
+                      orders INTEGER NOT NULL,
                       musicTitle VARCHAR(255) NOT NULL ,
                       playTime VARCHAR(255) NOT NULL,
                       status boolean NOT NULL,

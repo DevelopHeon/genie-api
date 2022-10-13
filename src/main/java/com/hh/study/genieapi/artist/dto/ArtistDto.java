@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Data @NoArgsConstructor
 @AllArgsConstructor @Builder
 public class ArtistDto {
-    @NotEmpty(message = "아티스트명은 필수 입력 값입니다.")
+    @NotBlank(message = "아티스트명은 필수 입력 값입니다.")
     private String artistName;
-    @NotEmpty(message = "출생일은 필수 입력 값입니다.")
-    private String artistBirth;
+    @NotNull
+    private LocalDate artistBirth;
     private String agency;
     @NotEmpty(message = "국적은 필수 입력 값입니다.")
     private String country;

@@ -1,4 +1,4 @@
-package com.hh.study.genieapi.entity;
+package com.hh.study.genieapi.album.entity;
 
 import lombok.*;
 
@@ -9,6 +9,7 @@ import lombok.*;
 @Builder @ToString
 public class Music {
 
+    private Integer orders;
     private Integer musicId;
     private Integer albumId;
     private String musicTitle;

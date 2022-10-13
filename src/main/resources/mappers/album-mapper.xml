@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hh.study.genieapi.album.repository.AlbumMapper">
-    <select id="getCount" resultType="int">
-        select count(*) from album
-    </select>
-
+<mapper namespace="com.hh.study.genieapi.album.mapper.AlbumMapper">
     <select id="findAll" resultType="Album">
-        select rownum() rnum,a.albumId, b.artistId, b.artistName, a.albumTitle,
+        select rownum() rnum, a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
-               b.createDate
+               a.createDate
                from album a
         join artist b on a.artistId = b.artistId
-        <if test="albumSearchParam != null">
-            where albumTitle LIKE '%'||#{albumSearchParam}||'%'
+        <if test="searchParam != null">
+            where albumTitle LIKE '%'||#{searchParam}||'%'
         </if>
         order by albumId desc
     </select>
@@ -34,23 +30,24 @@
 
     <insert id="insertMusics" parameterType="java.util.List">
         insert into music
-        (albumId, musicTitle, playTime, status)
+        (orders, albumId, musicTitle, playTime, status)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status})
+            (#{item.orders}, #{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status})
         </foreach>
     </insert>
 
     <select id="findByIdToAlbum" resultType="Album" parameterType="int">
         select a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
-               b.createDate
+               a.createDate, a.modifyDate
         from album a
                  join artist b on a.artistId = b.artistId
         where a.albumId = #{id}
     </select>
     <select id="findByIdToMusic" resultType="Music" parameterType="int">
-        select * from music
+        select *
+        from music
         where albumId = #{id}
     </select>
 
@@ -64,23 +61,10 @@
                 modifyDate = now()
         where albumId = #{albumId}
     </update>
-    <update id="updateMusics" parameterType="java.util.List">
-        <foreach collection="list" item="item" separator=",">
-            merge into music
-            using dual
-            on (musicId = #{item.musicId})
-            when matched then
-            update set albumId = #{item.albumId},
-            musicTitle = #{item.musicTitle},
-            playTime = #{item.playTime},
-            status = #{item.status}
-            when not matched then
-            insert into music
-            (albumId, musicTitle, playTime, status)
-            values
-            (#{item.albumId}, #{item.musicTitle}, #{item.playTime}, #{item.status});
-        </foreach>
-    </update>
+    <delete id="deleteMusics" parameterType="int">
+        delete from music
+        where albumId = #{id}
+    </delete>
     <delete id="deleteAlbums" parameterType="int">
         delete from album
         where albumId = #{id}

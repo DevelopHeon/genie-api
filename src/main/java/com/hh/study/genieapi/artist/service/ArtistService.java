@@ -2,9 +2,10 @@ package com.hh.study.genieapi.artist.service;
 
 import com.github.pagehelper.PageHelper;
 import com.hh.study.genieapi.artist.dto.ArtistDto;
-import com.hh.study.genieapi.artist.repository.ArtistMapper;
+import com.hh.study.genieapi.artist.mapper.ArtistMapper;
+import com.hh.study.genieapi.common.dto.SearchDto;
 import com.hh.study.genieapi.common.error.ArtistNotFoundException;
-import com.hh.study.genieapi.entity.Artist;
+import com.hh.study.genieapi.artist.entity.Artist;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -23,18 +24,16 @@ public class ArtistService {
     private final ArtistMapper artistMapper;
 
     private final ModelMapper modelMapper;
-    private final static int PAGE_SIZE=5;
 
     @Transactional(readOnly = true)
-    public List<Artist> findAll(String searchParam, int pageNum) {
-        PageHelper.startPage(pageNum, PAGE_SIZE);
-        return artistMapper.findAll(searchParam);
+    public List<Artist> findAll(SearchDto artistSearch) {
+        PageHelper.startPage(artistSearch.getPageNum(), artistSearch.getPageOption());
+        return artistMapper.findAll(artistSearch.getSearchParam());
     }
 
     public int save(ArtistDto artistDto) {
         Artist artist = modelMapper.map(artistDto, Artist.class);
 
-        log.info("artist : " + artist.toString());
         artistMapper.save(artist);
         return artist.getArtistId();
     }

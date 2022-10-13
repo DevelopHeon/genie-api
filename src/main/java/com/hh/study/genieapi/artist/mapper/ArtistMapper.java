@@ -1,6 +1,6 @@
-package com.hh.study.genieapi.artist.repository;
+package com.hh.study.genieapi.artist.mapper;
 
-import com.hh.study.genieapi.entity.Artist;
+import com.hh.study.genieapi.artist.entity.Artist;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

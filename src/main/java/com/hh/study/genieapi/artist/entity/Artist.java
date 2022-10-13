@@ -1,9 +1,9 @@
-package com.hh.study.genieapi.entity;
+package com.hh.study.genieapi.artist.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -15,7 +15,8 @@ public class Artist {
     private Integer artistId;
     private String artistAuthor;
     private String artistName;
-    private String artistBirth;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate artistBirth;
     private String agency;
     private String country;
     private String artistExplanation;
