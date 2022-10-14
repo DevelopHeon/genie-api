@@ -1,14 +1,12 @@
 package com.hh.study.genieapi.album.service;
 
 import com.github.pagehelper.PageHelper;
-import com.hh.study.genieapi.album.dto.AlbumDto;
-import com.hh.study.genieapi.album.dto.MusicDto;
+import com.hh.study.genieapi.album.dto.*;
+import com.hh.study.genieapi.album.entity.Album;
+import com.hh.study.genieapi.album.entity.Music;
 import com.hh.study.genieapi.album.mapper.AlbumMapper;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import com.hh.study.genieapi.common.error.AlbumNotFoundException;
-import com.hh.study.genieapi.album.entity.Album;
-import com.hh.study.genieapi.artist.entity.Artist;
-import com.hh.study.genieapi.album.entity.Music;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,18 +26,19 @@ public class AlbumService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<Album> findAll(SearchDto albumSearchDto) {
+    public List<AlbumList> findAll(SearchDto albumSearchDto) {
         PageHelper.startPage(albumSearchDto.getPageNum(), albumSearchDto.getPageOption());
-        return albumMapper.findAll(albumSearchDto.getSearchParam());
+        return albumMapper.findAll(albumSearchDto.getKeyword());
     }
 
-    public int createAlbums(AlbumDto albumDto) {
+    public int createAlbums(AlbumForm albumForm) {
 
-        Album album = modelMapper.map(albumDto, Album.class);
+        Album album = modelMapper.map(albumForm, Album.class);
         albumMapper.createAlbums(album);
 
-        if(albumDto.getMusicDtoList() != null){
-            List<Music> musicList = musicListBilled(albumDto, album.getAlbumId());
+        if(albumForm.getMusicFormList() != null){
+            log.info("musicList" + albumForm.getMusicFormList().toString());
+            List<Music> musicList = musicListBilled(albumForm, album.getAlbumId());
             albumMapper.insertMusics(musicList);
         }
         int result = album.getAlbumId();
@@ -47,35 +46,35 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public List<Artist> searchArtist(SearchDto artistSerachDto) {
+    public List<SerachArtistList> searchArtist(SearchDto artistSerachDto) {
         PageHelper.startPage(artistSerachDto.getPageNum(), artistSerachDto.getPageOption());
-        return albumMapper.searchArtist(artistSerachDto.getSearchParam());
+        return albumMapper.searchArtist(artistSerachDto.getKeyword());
     }
 
     @Transactional(readOnly = true)
-    public Album findById(Integer id) {
-        Optional<Album> optionalAlbum = albumMapper.findByIdToAlbum(id);
+    public AlbumDetail findById(Integer id) {
+        Optional<AlbumDetail> optionalAlbum = albumMapper.findByIdToAlbum(id);
         if(!optionalAlbum.isPresent()){
             throw new AlbumNotFoundException("앨범을 찾을 수 없습니다.");
         }
-        Album album = optionalAlbum.get();
+        AlbumDetail album = optionalAlbum.get();
 
-        List<Music> musicList = albumMapper.findByIdToMusic(id);
+        List<MusicDetail> musicList = albumMapper.findByIdToMusic(id);
         if(!musicList.isEmpty()){
             album.setMusicList(musicList);
         }
         return album;
     }
 
-    public int updateAlbums(AlbumDto albumDto, Integer id) {
+    public int updateAlbums(AlbumForm albumForm, Integer id) {
         findById(id);
-        Album album = modelMapper.map(albumDto, Album.class);
+        Album album = modelMapper.map(albumForm, Album.class);
         album.setAlbumId(id);
         int result = albumMapper.updateAlbums(album);
 
-        if(albumDto.getMusicDtoList() != null){
+        if(albumForm.getMusicFormList() != null){
             albumMapper.deleteMusics(id);
-            List<Music> musicList = musicListBilled(albumDto, id);
+            List<Music> musicList = musicListBilled(albumForm, id);
             albumMapper.insertMusics(musicList);
         }
 
@@ -87,9 +86,9 @@ public class AlbumService {
         return result;
     }
 
-    private List<Music> musicListBilled(AlbumDto albumDto, Integer id) {
+    private List<Music> musicListBilled(AlbumForm albumForm, Integer id) {
         List<Music> musicList = new ArrayList<>();
-        for(MusicDto m : albumDto.getMusicDtoList()){
+        for(MusicForm m : albumForm.getMusicFormList()){
             Music music = modelMapper.map(m, Music.class);
             music.setAlbumId(id);
             musicList.add(music);

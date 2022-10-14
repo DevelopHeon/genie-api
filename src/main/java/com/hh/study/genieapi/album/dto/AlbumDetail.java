@@ -1,19 +1,18 @@
-package com.hh.study.genieapi.album.entity;
+package com.hh.study.genieapi.album.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Builder @ToString
-public class Album {
+@AllArgsConstructor
+public class AlbumDetail {
 
-    private Integer rnum;
     private Integer albumId;
     private Integer artistId;
     private String artistName;
@@ -24,5 +23,5 @@ public class Album {
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private String albumAuthor;
-    private List<Music> musicList;
+    private List<MusicDetail> musicList;
 }

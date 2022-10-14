@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor @AllArgsConstructor
 public class SearchDto {
 
-    private String searchParam;
+    private String keyword;
     @NotNull
     private Integer pageNum = 1;
     @NotNull

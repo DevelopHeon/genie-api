@@ -1,28 +1,28 @@
-package com.hh.study.genieapi.album.entity;
+package com.hh.study.genieapi.album.dto;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Builder @ToString
-public class Album {
+@AllArgsConstructor
+public class AlbumList {
 
     private Integer rnum;
     private Integer albumId;
-    private Integer artistId;
     private String artistName;
     private String albumTitle;
     private LocalDate releaseDate;
     private String genre;
     private String albumExplanation;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifyDate;
     private String albumAuthor;
-    private List<Music> musicList;
 }

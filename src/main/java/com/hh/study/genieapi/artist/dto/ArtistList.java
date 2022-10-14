@@ -1,19 +1,22 @@
-package com.hh.study.genieapi.artist.entity;
+package com.hh.study.genieapi.artist.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-@Builder @ToString
-public class Artist {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ArtistList {
 
+    private int rnum;
     private Integer artistId;
-    private String artistAuthor;
     private String artistName;
+    private String artistAuthor;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate artistBirth;
     private String agency;
@@ -23,4 +26,5 @@ public class Artist {
     private LocalDateTime createDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifyDate;
+
 }

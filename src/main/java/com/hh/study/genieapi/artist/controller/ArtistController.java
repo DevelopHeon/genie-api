@@ -1,8 +1,9 @@
 package com.hh.study.genieapi.artist.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.hh.study.genieapi.artist.dto.ArtistDto;
-import com.hh.study.genieapi.artist.entity.Artist;
+import com.hh.study.genieapi.artist.dto.ArtistDetail;
+import com.hh.study.genieapi.artist.dto.ArtistForm;
+import com.hh.study.genieapi.artist.dto.ArtistList;
 import com.hh.study.genieapi.artist.service.ArtistService;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
@@ -23,28 +24,28 @@ public class ArtistController {
 
     @GetMapping("/artists")
     public ResponseEntity queryArtist(SearchDto artistSearch){
-        List<Artist> content = artistService.findAll(artistSearch);
+        List<ArtistList> content = artistService.findAll(artistSearch);
 
-        PageInfo<Artist> artists = new PageInfo<>(content, 10);
-        return ResponseEntity.ok(artists);
+        PageInfo<ArtistList> artistsList = new PageInfo<>(content, 10);
+        return ResponseEntity.ok(artistsList);
     }
 
     @GetMapping("/artists/{id}")
     public ResponseEntity getArtist(@PathVariable Integer id){
-        Artist artist = artistService.findById(id);
+        ArtistDetail artist = artistService.findById(id);
         return ResponseEntity.ok(artist);
     }
 
     @PostMapping("/artists")
-    public ResponseEntity createArtist(@RequestBody @Valid ArtistDto artistDto){
-        int result = artistService.save(artistDto);
+    public ResponseEntity createArtist(@RequestBody @Valid ArtistForm artistForm){
+        int result = artistService.save(artistForm);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/artists/{id}")
-    public ResponseEntity updateArtist(@RequestBody @Valid ArtistDto artistDto,
+    public ResponseEntity updateArtist(@RequestBody @Valid ArtistForm artistForm,
                                        @PathVariable Integer id){
-        int result = artistService.updateArtist(artistDto, id);
+        int result = artistService.updateArtist(artistForm, id);
         return ResponseEntity.ok(result);
     }
 

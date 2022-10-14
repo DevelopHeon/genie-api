@@ -2,8 +2,8 @@ package com.hh.study.genieapi.album.controller;
 
 
 import com.hh.study.common.BaseTest;
-import com.hh.study.genieapi.album.dto.AlbumDto;
-import com.hh.study.genieapi.album.dto.MusicDto;
+import com.hh.study.genieapi.album.dto.AlbumForm;
+import com.hh.study.genieapi.album.dto.MusicForm;
 import com.hh.study.genieapi.album.service.AlbumService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class AlbumControllerTest extends BaseTest {
     @Test
     @DisplayName("앨범 정상적으로 생성")
     void createAlbums() throws Exception{
-        AlbumDto albumDto = albumDtoBuilled();
+        AlbumForm albumForm = albumDtoBuilled();
 
     }
 
@@ -36,8 +36,8 @@ class AlbumControllerTest extends BaseTest {
                 .andExpect(status().isOk());
     }
 
-    private static AlbumDto albumDtoBuilled() {
-        return AlbumDto.builder()
+    private static AlbumForm albumDtoBuilled() {
+        return AlbumForm.builder()
                 .artistId(1)
                 .albumTitle("앨범 제목 테스트")
                 .releaseDate(LocalDate.parse("2022-10-20"))
@@ -46,8 +46,8 @@ class AlbumControllerTest extends BaseTest {
                 .build();
     }
 
-    private static MusicDto musicDtoBuilled(int index){
-        return MusicDto.builder()
+    private static MusicForm musicDtoBuilled(int index){
+        return MusicForm.builder()
                 .orders(index)
                 .musicTitle("음원 제목")
                 .playTime("03:31")

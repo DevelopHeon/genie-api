@@ -1,7 +1,9 @@
 package com.hh.study.genieapi.artist.service;
 
 import com.github.pagehelper.PageHelper;
-import com.hh.study.genieapi.artist.dto.ArtistDto;
+import com.hh.study.genieapi.artist.dto.ArtistDetail;
+import com.hh.study.genieapi.artist.dto.ArtistForm;
+import com.hh.study.genieapi.artist.dto.ArtistList;
 import com.hh.study.genieapi.artist.mapper.ArtistMapper;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import com.hh.study.genieapi.common.error.ArtistNotFoundException;
@@ -26,31 +28,31 @@ public class ArtistService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<Artist> findAll(SearchDto artistSearch) {
+    public List<ArtistList> findAll(SearchDto artistSearch) {
         PageHelper.startPage(artistSearch.getPageNum(), artistSearch.getPageOption());
-        return artistMapper.findAll(artistSearch.getSearchParam());
+        return artistMapper.findAll(artistSearch.getKeyword());
     }
 
-    public int save(ArtistDto artistDto) {
-        Artist artist = modelMapper.map(artistDto, Artist.class);
+    public int save(ArtistForm artistForm) {
+        Artist artist = modelMapper.map(artistForm, Artist.class);
 
         artistMapper.save(artist);
         return artist.getArtistId();
     }
 
     @Transactional(readOnly = true)
-    public Artist findById(Integer id) {
-        Optional<Artist> optionalArtist = artistMapper.findById(id);
+    public ArtistDetail findById(Integer id) {
+        Optional<ArtistDetail> optionalArtist = artistMapper.findById(id);
         if(!optionalArtist.isPresent()){
             throw new ArtistNotFoundException("아티스트를 찾을 수 없습니다.");
         }
-        Artist artist = optionalArtist.get();
+        ArtistDetail artist = optionalArtist.get();
         return artist;
     }
 
-    public int updateArtist(ArtistDto artistDto, Integer id) {
+    public int updateArtist(ArtistForm artistForm, Integer id) {
         findById(id);
-        Artist updateArtist = modelMapper.map(artistDto, Artist.class);
+        Artist updateArtist = modelMapper.map(artistForm, Artist.class);
         updateArtist.setArtistId(id);
         int result = artistMapper.updateArtist(updateArtist);
         return result;

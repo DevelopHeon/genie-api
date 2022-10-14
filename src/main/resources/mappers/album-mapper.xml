@@ -2,26 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.study.genieapi.album.mapper.AlbumMapper">
-    <select id="findAll" resultType="Album">
+    <select id="findAll" resultType="AlbumList">
         select rownum() rnum, a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
                a.createDate
                from album a
         join artist b on a.artistId = b.artistId
         <if test="searchParam != null">
-            where albumTitle LIKE '%'||#{searchParam}||'%'
+            where albumTitle LIKE '%'||#{keyword}||'%'
         </if>
         order by albumId desc
     </select>
-    <select id="searchArtist" resultType="Artist" parameterType="string">
+    <select id="searchArtist" resultType="SerachArtistList" parameterType="string">
         select rownum() rnum, * from artist
         <if test="searchParam != null">
-            where artistName LIKE '%'||#{searchParam}||'%'
+            where artistName LIKE '%'||#{keyword}||'%'
         </if>
         order by artistId desc
     </select>
 
-    <insert id="createAlbums" parameterType="Album" useGeneratedKeys="true" keyProperty="albumId">
+    <insert id="createAlbums" parameterType="com.hh.study.genieapi.album.entity.Album" useGeneratedKeys="true" keyProperty="albumId">
         insert into album
         (artistId, albumTitle, releaseDate, genre, albumExplanation, createDate, albumAuthor)
         values
@@ -37,7 +37,7 @@
         </foreach>
     </insert>
 
-    <select id="findByIdToAlbum" resultType="Album" parameterType="int">
+    <select id="findByIdToAlbum" resultType="AlbumDetail" parameterType="int">
         select a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
                a.createDate, a.modifyDate
@@ -45,13 +45,13 @@
                  join artist b on a.artistId = b.artistId
         where a.albumId = #{id}
     </select>
-    <select id="findByIdToMusic" resultType="Music" parameterType="int">
+    <select id="findByIdToMusic" resultType="MusicDetail" parameterType="int">
         select *
         from music
         where albumId = #{id}
     </select>
 
-    <update id="updateAlbums" parameterType="Album">
+    <update id="updateAlbums" parameterType="com.hh.study.genieapi.album.entity.Album">
         update album
             set artistId = #{artistId},
                 albumTitle = #{albumTitle},

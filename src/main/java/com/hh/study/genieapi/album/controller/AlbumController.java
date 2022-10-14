@@ -1,10 +1,11 @@
 package com.hh.study.genieapi.album.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.hh.study.genieapi.album.dto.AlbumDto;
-import com.hh.study.genieapi.album.entity.Album;
+import com.hh.study.genieapi.album.dto.AlbumDetail;
+import com.hh.study.genieapi.album.dto.AlbumForm;
+import com.hh.study.genieapi.album.dto.AlbumList;
+import com.hh.study.genieapi.album.dto.SerachArtistList;
 import com.hh.study.genieapi.album.service.AlbumService;
-import com.hh.study.genieapi.artist.entity.Artist;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,34 +23,34 @@ public class AlbumController {
     private final AlbumService albumService;
     @GetMapping("/albums")
     public ResponseEntity quertAlbums(SearchDto albumSearchDto){
-        List<Album> content = albumService.findAll(albumSearchDto);
-        PageInfo<Album> albums = new PageInfo<>(content, 10);
+        List<AlbumList> content = albumService.findAll(albumSearchDto);
+        PageInfo<AlbumList> albums = new PageInfo<>(content, 10);
         return ResponseEntity.ok(albums);
     }
 
     @GetMapping("/albums/artists")
     public ResponseEntity searchArtists(SearchDto artistSerachDto){
-        List<Artist> content = albumService.searchArtist(artistSerachDto);
-        PageInfo<Artist> artists = new PageInfo<>(content, 10);
+        List<SerachArtistList> content = albumService.searchArtist(artistSerachDto);
+        PageInfo<SerachArtistList> artists = new PageInfo<>(content, 10);
         return ResponseEntity.ok(artists);
     }
 
     @PostMapping("/albums")
-    public ResponseEntity createAlbums(@RequestBody @Valid AlbumDto albumDto){
-        int result = albumService.createAlbums(albumDto);
+    public ResponseEntity createAlbums(@RequestBody @Valid AlbumForm albumForm){
+        int result = albumService.createAlbums(albumForm);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/albums/{id}")
     public ResponseEntity getAlbums(@PathVariable Integer id){
-        Album album = albumService.findById(id);
+        AlbumDetail album = albumService.findById(id);
         return ResponseEntity.ok(album);
     }
 
     @PutMapping("/albums/{id}")
-    public ResponseEntity updateAlbums(@RequestBody @Valid AlbumDto albumDto,
+    public ResponseEntity updateAlbums(@RequestBody @Valid AlbumForm albumForm,
                                        @PathVariable Integer id){
-        int result = albumService.updateAlbums(albumDto, id);
+        int result = albumService.updateAlbums(albumForm, id);
         return ResponseEntity.ok(result);
     }
 

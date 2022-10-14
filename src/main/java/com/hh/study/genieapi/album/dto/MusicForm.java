@@ -14,7 +14,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MusicDto {
+public class MusicForm {
 
     @NotNull(message = "orders는 null일 수 없습니다.")
     private Integer orders;

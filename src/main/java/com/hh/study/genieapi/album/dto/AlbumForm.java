@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AlbumDto {
+public class AlbumForm {
 
     @Min(0)
     @NotNull(message = "artistId는 null일 수 없습니다.")
@@ -27,7 +27,6 @@ public class AlbumDto {
     private LocalDate releaseDate;
     private String albumExplanation;
     private String genre;
-    private String albumAuthor;
     @Valid
-    private List<MusicDto> musicDtoList;
+    private List<MusicForm> musicFormList;
 }

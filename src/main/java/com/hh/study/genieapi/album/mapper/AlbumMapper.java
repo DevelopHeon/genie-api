@@ -1,7 +1,10 @@
 package com.hh.study.genieapi.album.mapper;
 
+import com.hh.study.genieapi.album.dto.AlbumDetail;
+import com.hh.study.genieapi.album.dto.AlbumList;
+import com.hh.study.genieapi.album.dto.MusicDetail;
+import com.hh.study.genieapi.album.dto.SerachArtistList;
 import com.hh.study.genieapi.album.entity.Album;
-import com.hh.study.genieapi.artist.entity.Artist;
 import com.hh.study.genieapi.album.entity.Music;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -10,17 +13,17 @@ import java.util.Optional;
 
 @Mapper
 public interface AlbumMapper {
-    List<Album> findAll(String albumSearchParam);
+    List<AlbumList> findAll(String albumSearchParam);
 
     int createAlbums(Album album);
 
     void insertMusics(List<Music> musicList);
 
-    List<Artist> searchArtist(String searchParam);
+    List<SerachArtistList> searchArtist(String searchParam);
 
-    Optional<Album> findByIdToAlbum(Integer id);
+    Optional<AlbumDetail> findByIdToAlbum(Integer id);
 
-    List<Music> findByIdToMusic(Integer id);
+    List<MusicDetail> findByIdToMusic(Integer id);
 
     int updateAlbums(Album album);
 
