@@ -44,13 +44,13 @@ public class ArtistController {
     @PutMapping("/artists/{id}")
     public ResponseEntity updateArtist(@RequestBody @Valid ArtistDto artistDto,
                                        @PathVariable Integer id){
-        artistService.updateArtist(artistDto, id);
-        return ResponseEntity.ok().build();
+        int result = artistService.updateArtist(artistDto, id);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/artists/{id}")
     public ResponseEntity deleteArtist(@PathVariable Integer id){
-        artistService.deleteArtist(id);
-        return ResponseEntity.ok().build();
+        int result = artistService.deleteArtist(id);
+        return ResponseEntity.ok(result);
     }
 }

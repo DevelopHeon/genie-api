@@ -14,8 +14,8 @@ public interface ArtistMapper {
 
     Optional<Artist> findById(Integer id);
 
-    void updateArtist(Artist updateArtist);
+    int updateArtist(Artist updateArtist);
 
-    void deleteArtist(Integer id);
+    int deleteArtist(Integer id);
 
 }

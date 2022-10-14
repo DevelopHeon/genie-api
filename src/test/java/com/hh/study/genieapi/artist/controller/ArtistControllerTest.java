@@ -1,38 +1,25 @@
 package com.hh.study.genieapi.artist.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hh.study.genieapi.album.mapper.AlbumMapper;
+import com.hh.study.common.BaseTest;
 import com.hh.study.genieapi.artist.dto.ArtistDto;
-import com.hh.study.genieapi.artist.entity.Artist;
-import com.hh.study.genieapi.artist.mapper.ArtistMapper;
+import com.hh.study.genieapi.artist.service.ArtistService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class ArtistControllerTest {
+class ArtistControllerTest extends BaseTest {
 
     @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private ArtistMapper artistMapper;
-    @Autowired
-    private ModelMapper modelMapper;
+    private ArtistService artistService;
 
     @Test
     @DisplayName("아티스트 전체 조회 테스트")
@@ -42,6 +29,21 @@ class ArtistControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("total").exists());
+    }
+
+    @Test
+    @DisplayName("아티스트 총 50개 중 5개씩 2번째 페이지 조회")
+    void pageArtists() throws Exception {
+
+        IntStream.range(0, 29).forEach(i -> saveArtist());
+
+        mockMvc.perform(get("/api/genie/artists")
+                        .param("pageNum", "2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("total").exists())
+                .andExpect(jsonPath("total").value("50"));;
+
     }
 
     @Test
@@ -79,11 +81,11 @@ class ArtistControllerTest {
     @Test
     @DisplayName("아티스트 정상적으로 생성")
     void createArtist() throws Exception{
-        Artist newArtist = buildArtist();
+        ArtistDto newArtistDto = buildArtistDto();
 
         mockMvc.perform(post("/api/genie/artists")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(newArtist)))
+                .content(objectMapper.writeValueAsString(newArtistDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
@@ -91,11 +93,12 @@ class ArtistControllerTest {
     @Test
     @DisplayName("잘못된 값으로 아티스트 생성")
     void createArtist_BadRequest() throws Exception{
-        Artist newArtist = buildArtist();
+        ArtistDto newArtistDto = buildArtistDto();
+        newArtistDto.setArtistName(" ");
 
         mockMvc.perform(post("/api/genie/artists")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(newArtist)))
+                        .content(objectMapper.writeValueAsString(newArtistDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("message").exists());
@@ -103,10 +106,10 @@ class ArtistControllerTest {
     @Test
     @DisplayName("빈 값으로 아티스트 생성")
     void createArtist_Input_Empty() throws Exception{
-        Artist newArtist = new Artist();
+        ArtistDto newArtistDto = new ArtistDto();
         mockMvc.perform(post("/api/genie/artists")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(newArtist)))
+                        .content(objectMapper.writeValueAsString(newArtistDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("message").exists());
@@ -116,15 +119,13 @@ class ArtistControllerTest {
     @DisplayName("아티스트 정상적으로 수정하기")
     void updateArtist() throws Exception{
         int id = saveArtist();
-        Artist artist = buildArtist();
-
-        ArtistDto artistDto = modelMapper.map(artist, ArtistDto.class);
+        ArtistDto newArtistDto = buildArtistDto();
         String newArtistName = "홍길동";
-        artistDto.setArtistName(newArtistName);
+        newArtistDto.setArtistName(newArtistName);
 
         mockMvc.perform(put("/api/genie/artists/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(artistDto)))
+                        .content(objectMapper.writeValueAsString(newArtistDto)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -133,9 +134,8 @@ class ArtistControllerTest {
     @DisplayName("잘못된 입력 값으로 수정")
     void updateArtist_BadRequest() throws Exception{
         int id = saveArtist();
-        Artist artist = buildArtist();
+        ArtistDto artistDto = buildArtistDto();
 
-        ArtistDto artistDto = modelMapper.map(artist, ArtistDto.class);
         artistDto.setArtistName(" ");
         artistDto.setCountry(" ");
 
@@ -145,8 +145,43 @@ class ArtistControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
-    private Artist buildArtist() {
-        return Artist.builder()
+
+    @Test
+    @DisplayName("없는 아티스트 수정")
+    void updateArtist_NotFound() throws Exception{
+        ArtistDto artistDto = buildArtistDto();
+        String newArtistName = "홍길동";
+        artistDto.setArtistName(newArtistName);
+
+        mockMvc.perform(put("/api/genie/artists/{id}", "99999")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(artistDto)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("아티스트 정상적으로 삭제하기")
+    void deleteArtist() throws Exception{
+        int id = saveArtist();
+
+        mockMvc.perform(delete("/api/genie/artists/{id}", id))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("없는 아티스트 삭제하기")
+    void deleteArtist_NotFound() throws Exception{
+        saveArtist();
+
+        mockMvc.perform(delete("/api/genie/artists/{id}", "1231232998"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    private ArtistDto buildArtistDto() {
+        return ArtistDto.builder()
                 .artistName("김희헌")
                 .artistBirth(LocalDate.parse("1995-07-21"))
                 .agency("와이지")
@@ -155,9 +190,9 @@ class ArtistControllerTest {
                 .build();
     }
     private int saveArtist() {
-        Artist newArtist = buildArtist();
-        artistMapper.save(newArtist);
-        return newArtist.getArtistId();
+        ArtistDto newArtistDto = buildArtistDto();
+        int id = artistService.save(newArtistDto);
+        return id;
     }
 
 }

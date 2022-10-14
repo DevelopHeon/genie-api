@@ -27,8 +27,8 @@ public class ApiExceptionController {
     public ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(c -> {
-                    errors.put("fieldName : ", ((FieldError) c).getField());
-                    errors.put("message : ", c.getDefaultMessage());
+                    errors.put("fieldName", ((FieldError) c).getField());
+                    errors.put("message", c.getDefaultMessage());
                 }
         );
         ErrorResponse errorResponse = ErrorResponse.builder()

@@ -28,7 +28,7 @@ public class AlbumController {
     }
 
     @GetMapping("/albums/artists")
-    public ResponseEntity searchArtist(SearchDto artistSerachDto){
+    public ResponseEntity searchArtists(SearchDto artistSerachDto){
         List<Artist> content = albumService.searchArtist(artistSerachDto);
         PageInfo<Artist> artists = new PageInfo<>(content, 10);
         return ResponseEntity.ok(artists);
@@ -49,13 +49,13 @@ public class AlbumController {
     @PutMapping("/albums/{id}")
     public ResponseEntity updateAlbums(@RequestBody @Valid AlbumDto albumDto,
                                        @PathVariable Integer id){
-        albumService.updateAlbums(albumDto, id);
-        return ResponseEntity.ok().build();
+        int result = albumService.updateAlbums(albumDto, id);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/albums/{id}")
     public ResponseEntity deleteAlbums(@PathVariable Integer id){
-        albumService.deleteAlbums(id);
-        return ResponseEntity.ok().build();
+        int result = albumService.deleteAlbums(id);
+        return ResponseEntity.ok(result);
     }
 }

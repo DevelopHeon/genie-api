@@ -34,14 +34,16 @@ public class AlbumService {
     }
 
     public int createAlbums(AlbumDto albumDto) {
+
         Album album = modelMapper.map(albumDto, Album.class);
         albumMapper.createAlbums(album);
 
         if(albumDto.getMusicDtoList() != null){
-            List<Music> musicList = musicBilled(albumDto, album.getAlbumId());
+            List<Music> musicList = musicListBilled(albumDto, album.getAlbumId());
             albumMapper.insertMusics(musicList);
         }
-        return album.getAlbumId();
+        int result = album.getAlbumId();
+        return result;
     }
 
     @Transactional(readOnly = true)
@@ -65,25 +67,27 @@ public class AlbumService {
         return album;
     }
 
-    public void updateAlbums(AlbumDto albumDto, Integer id) {
+    public int updateAlbums(AlbumDto albumDto, Integer id) {
         findById(id);
         Album album = modelMapper.map(albumDto, Album.class);
         album.setAlbumId(id);
-        albumMapper.updateAlbums(album);
+        int result = albumMapper.updateAlbums(album);
 
         if(albumDto.getMusicDtoList() != null){
             albumMapper.deleteMusics(id);
-
-            List<Music> musicList = musicBilled(albumDto, id);
+            List<Music> musicList = musicListBilled(albumDto, id);
             albumMapper.insertMusics(musicList);
         }
+
+        return result;
     }
-    public void deleteAlbums(Integer id) {
+    public int deleteAlbums(Integer id) {
         findById(id);
-        albumMapper.deleteAlbums(id);
+        int result = albumMapper.deleteAlbums(id);
+        return result;
     }
 
-    private List<Music> musicBilled(AlbumDto albumDto, Integer id) {
+    private List<Music> musicListBilled(AlbumDto albumDto, Integer id) {
         List<Music> musicList = new ArrayList<>();
         for(MusicDto m : albumDto.getMusicDtoList()){
             Music music = modelMapper.map(m, Music.class);
@@ -92,5 +96,4 @@ public class AlbumService {
         }
         return musicList;
     }
-
 }

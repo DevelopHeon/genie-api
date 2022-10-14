@@ -22,9 +22,9 @@ public interface AlbumMapper {
 
     List<Music> findByIdToMusic(Integer id);
 
-    void updateAlbums(Album album);
+    int updateAlbums(Album album);
 
-    void deleteAlbums(Integer id);
+    int deleteAlbums(Integer id);
 
     void deleteMusics(Integer id);
 }

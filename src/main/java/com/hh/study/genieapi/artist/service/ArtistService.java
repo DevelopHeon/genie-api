@@ -48,17 +48,18 @@ public class ArtistService {
         return artist;
     }
 
-    public void updateArtist(ArtistDto artistDto, Integer id) {
-       findById(id);
-
+    public int updateArtist(ArtistDto artistDto, Integer id) {
+        findById(id);
         Artist updateArtist = modelMapper.map(artistDto, Artist.class);
         updateArtist.setArtistId(id);
-        artistMapper.updateArtist(updateArtist);
+        int result = artistMapper.updateArtist(updateArtist);
+        return result;
     }
 
-    public void deleteArtist(Integer id) {
+    public int deleteArtist(Integer id) {
         findById(id);
-        artistMapper.deleteArtist(id);
+        int result = artistMapper.deleteArtist(id);
+        return result;
     }
 
 }
