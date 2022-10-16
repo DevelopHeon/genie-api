@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,10 +37,8 @@ public class AlbumService {
 
         Album album = modelMapper.map(albumForm, Album.class);
         albumMapper.createAlbums(album);
-
         if(albumForm.getMusicFormList() != null){
-            log.info("musicList" + albumForm.getMusicFormList().toString());
-            List<Music> musicList = musicListBilled(albumForm, album.getAlbumId());
+            List<Music> musicList = musicListBilled(albumForm.getMusicFormList(), album.getAlbumId());
             albumMapper.insertMusics(musicList);
         }
         int result = album.getAlbumId();
@@ -74,7 +74,7 @@ public class AlbumService {
 
         if(albumForm.getMusicFormList() != null){
             albumMapper.deleteMusics(id);
-            List<Music> musicList = musicListBilled(albumForm, id);
+            List<Music> musicList = musicListBilled(albumForm.getMusicFormList(), id);
             albumMapper.insertMusics(musicList);
         }
 
@@ -86,13 +86,12 @@ public class AlbumService {
         return result;
     }
 
-    private List<Music> musicListBilled(AlbumForm albumForm, Integer id) {
-        List<Music> musicList = new ArrayList<>();
-        for(MusicForm m : albumForm.getMusicFormList()){
-            Music music = modelMapper.map(m, Music.class);
-            music.setAlbumId(id);
-            musicList.add(music);
-        }
-        return musicList;
+    private List<Music> musicListBilled(List<MusicForm> musicFormList, Integer id) {
+        return musicFormList.stream()
+                .map(i -> {
+                   Music music = modelMapper.map(i, Music.class);
+                   music.setAlbumId(id);
+                   return music;
+                }).collect(Collectors.toList());
     }
 }

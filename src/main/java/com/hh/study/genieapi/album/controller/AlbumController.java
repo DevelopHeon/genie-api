@@ -9,6 +9,7 @@ import com.hh.study.genieapi.album.service.AlbumService;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class AlbumController {
     @PostMapping("/albums")
     public ResponseEntity createAlbums(@RequestBody @Valid AlbumForm albumForm){
         int result = albumService.createAlbums(albumForm);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/albums/{id}")

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.study.genieapi.artist.mapper.ArtistMapper">
-    <select id="findAll" resultType="ArtistList" parameterType="string">
+    <select id="findAll" resultType="ArtistList">
         select rownum() rnum, * from artist
      <if test="searchParam != null">
         where artistName LIKE '%'||#{keyword}||'%'
@@ -10,18 +10,18 @@
         order by artistId DESC
     </select>
 
-    <select id="findById" parameterType="int" resultType="ArtistDetail">
+    <select id="findById" resultType="ArtistDetail">
         select * from artist
         where artistId = #{id}
     </select>
-    <insert id="save" parameterType="com.hh.study.genieapi.artist.entity.Artist" useGeneratedKeys="true" keyProperty="artistId">
+    <insert id="save" useGeneratedKeys="true" keyProperty="artistId">
         insert into ARTIST
         (artistAuthor, artistName, artistBirth, agency, country, artistExplanation, createDate)
         values
             ('sony', #{artistName}, #{artistBirth}, #{agency}, #{country}, #{artistExplanation}, default);
     </insert>
 
-    <update id="updateArtist" parameterType="com.hh.study.genieapi.artist.entity.Artist">
+    <update id="updateArtist">
         update ARTIST
         set artistName = #{artistName},
             artistBirth = #{artistBirth},
@@ -31,7 +31,7 @@
             modifyDate = NOW()
         where artistId = #{artistId}
     </update>
-    <delete id="deleteArtist" parameterType="int">
+    <delete id="deleteArtist">
         delete
         from ARTIST
         where artistId = #{id}

@@ -13,7 +13,7 @@
         </if>
         order by albumId desc
     </select>
-    <select id="searchArtist" resultType="SerachArtistList" parameterType="string">
+    <select id="searchArtist" resultType="SerachArtistList">
         select rownum() rnum, * from artist
         <if test="searchParam != null">
             where artistName LIKE '%'||#{keyword}||'%'
@@ -21,7 +21,7 @@
         order by artistId desc
     </select>
 
-    <insert id="createAlbums" parameterType="com.hh.study.genieapi.album.entity.Album" useGeneratedKeys="true" keyProperty="albumId">
+    <insert id="createAlbums" useGeneratedKeys="true" keyProperty="albumId">
         insert into album
         (artistId, albumTitle, releaseDate, genre, albumExplanation, createDate, albumAuthor)
         values
@@ -37,7 +37,7 @@
         </foreach>
     </insert>
 
-    <select id="findByIdToAlbum" resultType="AlbumDetail" parameterType="int">
+    <select id="findByIdToAlbum" resultType="AlbumDetail">
         select a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
                a.createDate, a.modifyDate
@@ -45,13 +45,13 @@
                  join artist b on a.artistId = b.artistId
         where a.albumId = #{id}
     </select>
-    <select id="findByIdToMusic" resultType="MusicDetail" parameterType="int">
+    <select id="findByIdToMusic" resultType="MusicDetail">
         select *
         from music
         where albumId = #{id}
     </select>
 
-    <update id="updateAlbums" parameterType="com.hh.study.genieapi.album.entity.Album">
+    <update id="updateAlbums">
         update album
             set artistId = #{artistId},
                 albumTitle = #{albumTitle},
@@ -61,11 +61,11 @@
                 modifyDate = now()
         where albumId = #{albumId}
     </update>
-    <delete id="deleteMusics" parameterType="int">
+    <delete id="deleteMusics">
         delete from music
         where albumId = #{id}
     </delete>
-    <delete id="deleteAlbums" parameterType="int">
+    <delete id="deleteAlbums">
         delete from album
         where albumId = #{id}
     </delete>

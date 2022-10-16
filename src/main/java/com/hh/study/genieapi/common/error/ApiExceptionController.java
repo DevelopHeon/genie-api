@@ -2,13 +2,14 @@ package com.hh.study.genieapi.common.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionController {
@@ -25,12 +26,10 @@ public class ApiExceptionController {
 
     @ExceptionHandler
     public ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach(c -> {
-                    errors.put("fieldName", ((FieldError) c).getField());
-                    errors.put("message", c.getDefaultMessage());
-                }
-        );
+        List<FieldError> errors = ex.getFieldErrors().stream()
+                .map(error -> new FieldError(error.getField(), error.getDefaultMessage()))
+                .collect(Collectors.toList());
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code("Error_400")
                 .message("잘못된 요청입니다.")
