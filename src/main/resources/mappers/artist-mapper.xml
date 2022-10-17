@@ -23,13 +23,13 @@
 
     <update id="updateArtist">
         update ARTIST
-        set artistName = #{artistName},
-            artistBirth = #{artistBirth},
-            agency = #{agency},
-            country = #{country},
-            artistExplanation = #{artistExplanation},
+        set artistName = #{artist.artistName},
+            artistBirth = #{artist.artistBirth},
+            agency = #{artist.agency},
+            country = #{artist.country},
+            artistExplanation = #{artist.artistExplanation},
             modifyDate = NOW()
-        where artistId = #{artistId}
+        where artistId = #{id}
     </update>
     <delete id="deleteArtist">
         delete

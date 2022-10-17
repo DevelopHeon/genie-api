@@ -51,7 +51,7 @@ class ArtistControllerTest extends BaseTest {
     void serachArtists() throws Exception{
 
         mockMvc.perform(get("/api/genie/artists")
-                .param("searchParam", "아이유")
+                .param("keyword", "아이유")
                 .param("pageNum", "2"))
                 .andDo(print())
                 .andExpect(status().isOk());

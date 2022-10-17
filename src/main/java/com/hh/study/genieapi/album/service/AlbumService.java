@@ -1,6 +1,7 @@
 package com.hh.study.genieapi.album.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hh.study.genieapi.album.dto.*;
 import com.hh.study.genieapi.album.entity.Album;
 import com.hh.study.genieapi.album.entity.Music;
@@ -13,11 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,9 +27,11 @@ public class AlbumService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<AlbumList> findAll(SearchDto albumSearchDto) {
-        PageHelper.startPage(albumSearchDto.getPageNum(), albumSearchDto.getPageOption());
-        return albumMapper.findAll(albumSearchDto.getKeyword());
+    public PageInfo<AlbumList> findAll(SearchDto searchDto) {
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        List<AlbumList> albumLists = albumMapper.findAll(searchDto.getKeyword());
+        PageInfo<AlbumList> albums = new PageInfo<>(albumLists, 10);
+        return albums;
     }
 
     public int createAlbums(AlbumForm albumForm) {
@@ -38,7 +39,7 @@ public class AlbumService {
         Album album = modelMapper.map(albumForm, Album.class);
         albumMapper.createAlbums(album);
         if(albumForm.getMusicFormList() != null){
-            List<Music> musicList = musicListBilled(albumForm.getMusicFormList(), album.getAlbumId());
+            List<Music> musicList = musicFormToMusic(albumForm.getMusicFormList(), album.getAlbumId());
             albumMapper.insertMusics(musicList);
         }
         int result = album.getAlbumId();
@@ -46,9 +47,11 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public List<SerachArtistList> searchArtist(SearchDto artistSerachDto) {
-        PageHelper.startPage(artistSerachDto.getPageNum(), artistSerachDto.getPageOption());
-        return albumMapper.searchArtist(artistSerachDto.getKeyword());
+    public PageInfo<SerachArtistList> searchArtist(SearchDto searchDto) {
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        List<SerachArtistList> serachArtistLists = albumMapper.searchArtist(searchDto.getKeyword());
+        PageInfo<SerachArtistList> artists = new PageInfo<>(serachArtistLists, 10);
+        return artists;
     }
 
     @Transactional(readOnly = true)
@@ -69,12 +72,11 @@ public class AlbumService {
     public int updateAlbums(AlbumForm albumForm, Integer id) {
         findById(id);
         Album album = modelMapper.map(albumForm, Album.class);
-        album.setAlbumId(id);
-        int result = albumMapper.updateAlbums(album);
+        int result = albumMapper.updateAlbums(album, id);
 
         if(albumForm.getMusicFormList() != null){
             albumMapper.deleteMusics(id);
-            List<Music> musicList = musicListBilled(albumForm.getMusicFormList(), id);
+            List<Music> musicList = musicFormToMusic(albumForm.getMusicFormList(), id);
             albumMapper.insertMusics(musicList);
         }
 
@@ -86,7 +88,7 @@ public class AlbumService {
         return result;
     }
 
-    private List<Music> musicListBilled(List<MusicForm> musicFormList, Integer id) {
+    private List<Music> musicFormToMusic(List<MusicForm> musicFormList, Integer id) {
         return musicFormList.stream()
                 .map(i -> {
                    Music music = modelMapper.map(i, Music.class);

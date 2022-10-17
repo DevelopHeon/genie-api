@@ -7,6 +7,7 @@ import com.hh.study.genieapi.album.dto.SerachArtistList;
 import com.hh.study.genieapi.album.entity.Album;
 import com.hh.study.genieapi.album.entity.Music;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,7 @@ public interface AlbumMapper {
 
     List<MusicDetail> findByIdToMusic(Integer id);
 
-    int updateAlbums(Album album);
+    int updateAlbums(@Param("album")Album album, @Param("id")Integer id);
 
     int deleteAlbums(Integer id);
 

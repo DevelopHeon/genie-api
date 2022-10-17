@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +12,6 @@ import java.util.List;
 @Builder @ToString
 public class Album {
 
-    private Integer rnum;
     private Integer albumId;
     private Integer artistId;
     private String artistName;
@@ -24,5 +22,4 @@ public class Album {
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private String albumAuthor;
-    private List<Music> musicList;
 }

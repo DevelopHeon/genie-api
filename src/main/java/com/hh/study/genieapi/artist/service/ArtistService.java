@@ -1,6 +1,7 @@
 package com.hh.study.genieapi.artist.service;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hh.study.genieapi.artist.dto.ArtistDetail;
 import com.hh.study.genieapi.artist.dto.ArtistForm;
 import com.hh.study.genieapi.artist.dto.ArtistList;
@@ -28,14 +29,15 @@ public class ArtistService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<ArtistList> findAll(SearchDto artistSearch) {
-        PageHelper.startPage(artistSearch.getPageNum(), artistSearch.getPageOption());
-        return artistMapper.findAll(artistSearch.getKeyword());
+    public PageInfo<ArtistList> findAll(SearchDto searchDto) {
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        List<ArtistList> artistLists = artistMapper.findAll(searchDto.getKeyword());
+        PageInfo<ArtistList> artistsList = new PageInfo<>(artistLists, 10);
+        return artistsList;
     }
 
     public int save(ArtistForm artistForm) {
         Artist artist = modelMapper.map(artistForm, Artist.class);
-
         artistMapper.save(artist);
         return artist.getArtistId();
     }
@@ -53,8 +55,7 @@ public class ArtistService {
     public int updateArtist(ArtistForm artistForm, Integer id) {
         findById(id);
         Artist updateArtist = modelMapper.map(artistForm, Artist.class);
-        updateArtist.setArtistId(id);
-        int result = artistMapper.updateArtist(updateArtist);
+        int result = artistMapper.updateArtist(updateArtist, id);
         return result;
     }
 

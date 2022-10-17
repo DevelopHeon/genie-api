@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -23,10 +22,8 @@ public class ArtistController {
     private final ArtistService artistService;
 
     @GetMapping("/artists")
-    public ResponseEntity queryArtist(SearchDto artistSearch){
-        List<ArtistList> content = artistService.findAll(artistSearch);
-
-        PageInfo<ArtistList> artistsList = new PageInfo<>(content, 10);
+    public ResponseEntity queryArtist(SearchDto searchDto){
+        PageInfo<ArtistList> artistsList = artistService.findAll(searchDto);
         return ResponseEntity.ok(artistsList);
     }
 

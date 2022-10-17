@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/genie")
@@ -23,17 +22,15 @@ import java.util.List;
 public class AlbumController {
     private final AlbumService albumService;
     @GetMapping("/albums")
-    public ResponseEntity quertAlbums(SearchDto albumSearchDto){
-        List<AlbumList> content = albumService.findAll(albumSearchDto);
-        PageInfo<AlbumList> albums = new PageInfo<>(content, 10);
-        return ResponseEntity.ok(albums);
+    public ResponseEntity quertAlbums(SearchDto searchDto){
+        PageInfo<AlbumList> albumLists = albumService.findAll(searchDto);
+        return ResponseEntity.ok(albumLists);
     }
 
     @GetMapping("/albums/artists")
-    public ResponseEntity searchArtists(SearchDto artistSerachDto){
-        List<SerachArtistList> content = albumService.searchArtist(artistSerachDto);
-        PageInfo<SerachArtistList> artists = new PageInfo<>(content, 10);
-        return ResponseEntity.ok(artists);
+    public ResponseEntity searchArtists(SearchDto searchDto){
+        PageInfo<SerachArtistList> artistLists = albumService.searchArtist(searchDto);
+        return ResponseEntity.ok(artistLists);
     }
 
     @PostMapping("/albums")

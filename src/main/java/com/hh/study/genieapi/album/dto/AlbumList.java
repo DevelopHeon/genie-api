@@ -1,6 +1,5 @@
 package com.hh.study.genieapi.album.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +19,7 @@ public class AlbumList {
     private LocalDate releaseDate;
     private String genre;
     private String albumExplanation;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime modifyDate;
     private String albumAuthor;
 }
