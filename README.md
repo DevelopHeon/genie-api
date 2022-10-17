@@ -4,7 +4,7 @@
 * mybatis
 * java 8
 * h2 DB
-* 라이브러리
+* ### 라이브러리
 * pagehelper
 * lombok
 * modelmapper
