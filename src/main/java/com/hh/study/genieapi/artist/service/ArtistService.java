@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.hh.study.genieapi.artist.dto.ArtistDetail;
 import com.hh.study.genieapi.artist.dto.ArtistForm;
 import com.hh.study.genieapi.artist.dto.ArtistList;
+import com.hh.study.genieapi.artist.entity.Artist;
 import com.hh.study.genieapi.artist.mapper.ArtistMapper;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import com.hh.study.genieapi.common.error.ArtistNotFoundException;
-import com.hh.study.genieapi.artist.entity.Artist;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -44,10 +43,8 @@ public class ArtistService {
 
     @Transactional(readOnly = true)
     public ArtistDetail findById(Integer id) {
-        Optional<ArtistDetail> optionalArtist = artistMapper.findById(id);
-        optionalArtist.orElseThrow(() -> new ArtistNotFoundException("아티스트를 찾을 수 없습니다."));
-        ArtistDetail artist = optionalArtist.get();
-        return artist;
+        return artistMapper.findById(id)
+                .orElseThrow(() -> new ArtistNotFoundException("아티스트를 찾을 수 없습니다."));
     }
 
     public int updateArtist(ArtistForm artistForm, Integer id) {
