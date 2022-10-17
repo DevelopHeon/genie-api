@@ -45,9 +45,7 @@ public class ArtistService {
     @Transactional(readOnly = true)
     public ArtistDetail findById(Integer id) {
         Optional<ArtistDetail> optionalArtist = artistMapper.findById(id);
-        if(!optionalArtist.isPresent()){
-            throw new ArtistNotFoundException("아티스트를 찾을 수 없습니다.");
-        }
+        optionalArtist.orElseThrow(() -> new ArtistNotFoundException("아티스트를 찾을 수 없습니다."));
         ArtistDetail artist = optionalArtist.get();
         return artist;
     }

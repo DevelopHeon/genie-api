@@ -6,6 +6,7 @@ import com.hh.study.genieapi.album.dto.*;
 import com.hh.study.genieapi.album.entity.Album;
 import com.hh.study.genieapi.album.entity.Music;
 import com.hh.study.genieapi.album.mapper.AlbumMapper;
+import com.hh.study.genieapi.artist.service.ArtistService;
 import com.hh.study.genieapi.common.dto.SearchDto;
 import com.hh.study.genieapi.common.error.AlbumNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class AlbumService {
     private final AlbumMapper albumMapper;
     private final ModelMapper modelMapper;
+    private final ArtistService artistService;
 
     @Transactional(readOnly = true)
     public PageInfo<AlbumList> findAll(SearchDto searchDto) {
@@ -35,6 +37,7 @@ public class AlbumService {
     }
 
     public int save(AlbumForm albumForm) {
+        artistService.findById(albumForm.getArtistId());
 
         Album album = modelMapper.map(albumForm, Album.class);
         albumMapper.saveAlbums(album);
@@ -57,9 +60,7 @@ public class AlbumService {
     @Transactional(readOnly = true)
     public AlbumDetail findById(Integer id) {
         Optional<AlbumDetail> optionalAlbum = albumMapper.findByIdToAlbum(id);
-        if(!optionalAlbum.isPresent()){
-            throw new AlbumNotFoundException("앨범을 찾을 수 없습니다.");
-        }
+        optionalAlbum.orElseThrow(() -> new AlbumNotFoundException("앨범을 찾을 수 없습니다."));
         AlbumDetail album = optionalAlbum.get();
 
         List<MusicDetail> musicList = albumMapper.findByIdToMusic(id);
@@ -70,7 +71,9 @@ public class AlbumService {
     }
 
     public int updateAlbums(AlbumForm albumForm, Integer id) {
+        artistService.findById(albumForm.getArtistId());
         findById(id);
+
         Album album = modelMapper.map(albumForm, Album.class);
         int result = albumMapper.updateAlbums(album, id);
 
@@ -90,8 +93,8 @@ public class AlbumService {
 
     private List<Music> musicFormToMusic(List<MusicForm> musicFormList, Integer id) {
         return musicFormList.stream()
-                .map(i -> {
-                   Music music = modelMapper.map(i, Music.class);
+                .map(musicForm -> {
+                   Music music = modelMapper.map(musicForm, Music.class);
                    music.setAlbumId(id);
                    return music;
                 }).collect(Collectors.toList());

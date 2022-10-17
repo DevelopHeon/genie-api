@@ -23,5 +23,6 @@ public class MusicForm {
     @NotEmpty(message = "재생시간은 필수 값입니다.")
     @Pattern(regexp = "([0-5][0-9]):([0-5][0-9])")
     private String playTime;
+    @NotNull
     private Boolean status;
 }
