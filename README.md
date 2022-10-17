@@ -4,7 +4,11 @@
 * mybatis
 * java 8
 * h2 DB
+* 라이브러리
 * pagehelper
+* lombok
+* modelmapper
+* aop
 
 * ## ERD 다이어그램
 ![image](https://user-images.githubusercontent.com/87063007/196070922-7440042b-e392-4516-8260-1838e1addf0c.png)
