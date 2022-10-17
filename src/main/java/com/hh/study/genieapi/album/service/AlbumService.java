@@ -28,19 +28,19 @@ public class AlbumService {
 
     @Transactional(readOnly = true)
     public PageInfo<AlbumList> findAll(SearchDto searchDto) {
-        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageSize());
         List<AlbumList> albumLists = albumMapper.findAll(searchDto.getKeyword());
         PageInfo<AlbumList> albums = new PageInfo<>(albumLists, 10);
         return albums;
     }
 
-    public int createAlbums(AlbumForm albumForm) {
+    public int save(AlbumForm albumForm) {
 
         Album album = modelMapper.map(albumForm, Album.class);
-        albumMapper.createAlbums(album);
+        albumMapper.saveAlbums(album);
         if(albumForm.getMusicFormList() != null){
             List<Music> musicList = musicFormToMusic(albumForm.getMusicFormList(), album.getAlbumId());
-            albumMapper.insertMusics(musicList);
+            albumMapper.saveMusics(musicList);
         }
         int result = album.getAlbumId();
         return result;
@@ -48,7 +48,7 @@ public class AlbumService {
 
     @Transactional(readOnly = true)
     public PageInfo<SerachArtistList> searchArtist(SearchDto searchDto) {
-        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageSize());
         List<SerachArtistList> serachArtistLists = albumMapper.searchArtist(searchDto.getKeyword());
         PageInfo<SerachArtistList> artists = new PageInfo<>(serachArtistLists, 10);
         return artists;
@@ -77,7 +77,7 @@ public class AlbumService {
         if(albumForm.getMusicFormList() != null){
             albumMapper.deleteMusics(id);
             List<Music> musicList = musicFormToMusic(albumForm.getMusicFormList(), id);
-            albumMapper.insertMusics(musicList);
+            albumMapper.saveMusics(musicList);
         }
 
         return result;

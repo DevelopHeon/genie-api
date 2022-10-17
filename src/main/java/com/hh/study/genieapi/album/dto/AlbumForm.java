@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -18,7 +17,6 @@ import java.util.List;
 @Builder
 public class AlbumForm {
 
-    @Min(0)
     @NotNull(message = "artistId는 null일 수 없습니다.")
     private Integer artistId;
     @NotBlank(message = "앨범명은 필수 값입니다.")

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder @ToString
+@Builder
 public class Album {
 
     private Integer albumId;

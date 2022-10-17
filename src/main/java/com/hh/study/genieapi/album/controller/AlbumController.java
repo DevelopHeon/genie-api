@@ -22,7 +22,7 @@ import javax.validation.Valid;
 public class AlbumController {
     private final AlbumService albumService;
     @GetMapping("/albums")
-    public ResponseEntity quertAlbums(SearchDto searchDto){
+    public ResponseEntity queryAlbums(SearchDto searchDto){
         PageInfo<AlbumList> albumLists = albumService.findAll(searchDto);
         return ResponseEntity.ok(albumLists);
     }
@@ -35,7 +35,7 @@ public class AlbumController {
 
     @PostMapping("/albums")
     public ResponseEntity createAlbums(@RequestBody @Valid AlbumForm albumForm){
-        int result = albumService.createAlbums(albumForm);
+        int result = albumService.save(albumForm);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 

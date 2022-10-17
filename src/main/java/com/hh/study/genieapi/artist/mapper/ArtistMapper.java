@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Mapper
 public interface ArtistMapper {
-    List<ArtistList> findAll(String searchParam);
+    List<ArtistList> findAll(String keyword);
 
     int save(Artist artistDto);
 

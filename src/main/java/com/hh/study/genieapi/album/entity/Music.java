@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder @ToString
+@Builder
 public class Music {
 
     private Integer orders;

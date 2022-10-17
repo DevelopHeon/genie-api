@@ -8,27 +8,27 @@
                a.createDate
                from album a
         join artist b on a.artistId = b.artistId
-        <if test="searchParam != null">
+        <if test="keyword != null">
             where albumTitle LIKE '%'||#{keyword}||'%'
         </if>
         order by albumId desc
     </select>
     <select id="searchArtist" resultType="SerachArtistList">
         select rownum() rnum, * from artist
-        <if test="searchParam != null">
+        <if test="keyword != null">
             where artistName LIKE '%'||#{keyword}||'%'
         </if>
         order by artistId desc
     </select>
 
-    <insert id="createAlbums" useGeneratedKeys="true" keyProperty="albumId">
+    <insert id="saveAlbums" useGeneratedKeys="true" keyProperty="albumId">
         insert into album
         (artistId, albumTitle, releaseDate, genre, albumExplanation, createDate, albumAuthor)
         values
             (#{artistId}, #{albumTitle}, #{releaseDate}, #{genre}, #{albumExplanation}, NOW(), 'sony');
     </insert>
 
-    <insert id="insertMusics" parameterType="java.util.List">
+    <insert id="saveMusics" parameterType="java.util.List">
         insert into music
         (orders, albumId, musicTitle, playTime, status)
         values

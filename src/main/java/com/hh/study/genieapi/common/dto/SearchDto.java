@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -15,5 +14,5 @@ public class SearchDto {
     @NotNull
     private Integer pageNum = 1;
     @NotNull
-    private Integer pageOption = 5;
+    private Integer pageSize = 5;
 }

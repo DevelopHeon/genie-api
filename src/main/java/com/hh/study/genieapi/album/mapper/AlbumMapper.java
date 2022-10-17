@@ -14,13 +14,13 @@ import java.util.Optional;
 
 @Mapper
 public interface AlbumMapper {
-    List<AlbumList> findAll(String albumSearchParam);
+    List<AlbumList> findAll(String keyword);
 
-    int createAlbums(Album album);
+    int saveAlbums(Album album);
 
-    void insertMusics(List<Music> musicList);
+    void saveMusics(List<Music> musicList);
 
-    List<SerachArtistList> searchArtist(String searchParam);
+    List<SerachArtistList> searchArtist(String keyword);
 
     Optional<AlbumDetail> findByIdToAlbum(Integer id);
 

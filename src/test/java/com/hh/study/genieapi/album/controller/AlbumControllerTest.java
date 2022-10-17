@@ -132,7 +132,7 @@ class AlbumControllerTest extends BaseTest {
     @DisplayName("앨범 정상적으로 삭제")
     void deleteAlbums() throws Exception{
         AlbumForm albumForm = albumDtoBuilled();
-        int id = albumService.createAlbums(albumForm);
+        int id = albumService.save(albumForm);
 
         mockMvc.perform(delete("/api/genie/albums/{id}", id))
                 .andDo(print())

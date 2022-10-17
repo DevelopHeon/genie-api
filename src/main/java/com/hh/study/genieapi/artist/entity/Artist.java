@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-@Builder @ToString
+@Builder
 public class Artist {
 
     private Integer artistId;

@@ -30,7 +30,7 @@ public class ArtistService {
 
     @Transactional(readOnly = true)
     public PageInfo<ArtistList> findAll(SearchDto searchDto) {
-        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageOption());
+        PageHelper.startPage(searchDto.getPageNum(), searchDto.getPageSize());
         List<ArtistList> artistLists = artistMapper.findAll(searchDto.getKeyword());
         PageInfo<ArtistList> artistsList = new PageInfo<>(artistLists, 10);
         return artistsList;

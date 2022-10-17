@@ -4,7 +4,7 @@
 <mapper namespace="com.hh.study.genieapi.artist.mapper.ArtistMapper">
     <select id="findAll" resultType="ArtistList">
         select rownum() rnum, * from artist
-     <if test="searchParam != null">
+     <if test="keyword != null">
         where artistName LIKE '%'||#{keyword}||'%'
      </if>
         order by artistId DESC
