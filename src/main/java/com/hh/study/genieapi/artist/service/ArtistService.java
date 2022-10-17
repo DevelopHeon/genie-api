@@ -22,9 +22,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class ArtistService {
-
     private final ArtistMapper artistMapper;
-
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)

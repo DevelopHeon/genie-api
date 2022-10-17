@@ -89,6 +89,7 @@ public class AlbumService {
 
     public int deleteAlbums(Integer id) {
         findByIdCheck(id);
+        albumMapper.deleteMusics(id);
         int result = albumMapper.deleteAlbums(id);
         return result;
     }
