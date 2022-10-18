@@ -22,9 +22,7 @@ public interface AlbumMapper {
 
     List<SerachArtistList> searchArtist(String keyword);
 
-    Optional<AlbumDetail> findByIdToAlbum(Integer id);
-
-    List<MusicDetail> findByIdToMusic(Integer id);
+    Optional<AlbumDetail> findByIdAlbumDetail(Integer id);
 
     int updateAlbums(@Param("album")Album album, @Param("id")Integer id);
 

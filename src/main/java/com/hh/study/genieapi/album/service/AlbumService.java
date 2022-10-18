@@ -58,17 +58,9 @@ public class AlbumService {
     }
 
     @Transactional(readOnly = true)
-    public AlbumDetail findById(Integer id) {
-        Optional<AlbumDetail> optionalAlbumDetail = albumMapper.findByIdToAlbum(id);
-        if(!optionalAlbumDetail.isPresent()){
-            throw new AlbumNotFoundException("앨범을 찾을 수 없습니다.");
-        }
-        AlbumDetail albumDetail = optionalAlbumDetail.get();
-        List<MusicDetail> musicList = albumMapper.findByIdToMusic(id);
-        if(!musicList.isEmpty()){
-            albumDetail.setMusicList(musicList);
-        }
-        return albumDetail;
+    public AlbumDetail getAlbums(Integer id) {
+        return albumMapper.findByIdAlbumDetail(id)
+                .orElseThrow(() -> new AlbumNotFoundException("앨범을 찾을 수 없습니다."));
     }
 
     public int updateAlbums(AlbumForm albumForm, Integer id) {
@@ -95,7 +87,7 @@ public class AlbumService {
     }
 
     private void findByIdCheck(Integer id) {
-        albumMapper.findByIdToAlbum(id)
+        albumMapper.findByIdAlbumDetail(id)
                 .orElseThrow(() -> new AlbumNotFoundException("앨범을 찾을 수 없습니다."));
     }
 

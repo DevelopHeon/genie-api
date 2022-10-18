@@ -81,7 +81,7 @@ class AlbumControllerTest extends BaseTest {
     @Test
     @DisplayName("앨범 정상적으로 수정")
     void updateAlbums() throws Exception{
-        albumService.findById(1);
+        albumService.getAlbums(1);
 
         AlbumForm album = AlbumForm.builder()
                 .albumTitle("앨범 수정")
@@ -100,7 +100,7 @@ class AlbumControllerTest extends BaseTest {
     @Test
     @DisplayName("존재하지 않는 앨범 수정")
     void updateAlbums_AlbumNotFound() throws Exception{
-        albumService.findById(1);
+        albumService.getAlbums(1);
 
         AlbumForm albumForm = AlbumForm.builder()
                 .albumTitle("앨범 수정")

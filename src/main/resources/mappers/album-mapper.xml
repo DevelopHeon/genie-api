@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.study.genieapi.album.mapper.AlbumMapper">
+    <resultMap id="AlbumDetailMap" type="AlbumDetail" autoMapping="true">
+        <id column="albumId" property="albumId" />
+        <collection property="musicList" javaType="java.util.List" ofType="MusicDetail">
+            <id property="musicId" column="musicId" />
+            <result column="orders" property="orders" />
+            <result column="musicTitle" property="musicTitle" />
+            <result column="playTime" property="playTime" />
+            <result column="status" property="status" />
+        </collection>
+    </resultMap>
     <select id="findAll" resultType="AlbumList">
         select rownum() rnum, a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
@@ -37,12 +47,14 @@
         </foreach>
     </insert>
 
-    <select id="findByIdToAlbum" resultType="AlbumDetail">
+    <select id="findByIdAlbumDetail" resultMap="AlbumDetailMap">
         select a.albumId, b.artistId, b.artistName, a.albumTitle,
                a.releaseDate, a.genre, a.albumExplanation, a.albumAuthor,
-               a.createDate, a.modifyDate
+               a.createDate, a.modifyDate, c.musicId, c.orders, c.musicTitle,
+               c.playTime, c.status
         from album a
-                 join artist b on a.artistId = b.artistId
+                left join artist b on a.artistId = b.artistId
+                left join music c on a.albumId = c.albumId
         where a.albumId = #{id}
     </select>
     <select id="findByIdToMusic" resultType="MusicDetail">

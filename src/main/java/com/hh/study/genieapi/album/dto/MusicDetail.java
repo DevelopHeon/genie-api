@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MusicDetail {
+    private Integer musicId;
     private Integer orders;
     private String musicTitle;
     private String playTime;
