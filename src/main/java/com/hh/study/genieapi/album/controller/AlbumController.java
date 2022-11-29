@@ -35,6 +35,7 @@ public class AlbumController {
         log.info("reset test 1");
         log.info("reset test 2");
         log.info("reset test 3");
+        log.info("reset test 4");
         log.info("stash 테스트");
         return ResponseEntity.ok(artistLists);
     }
