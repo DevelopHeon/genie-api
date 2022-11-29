@@ -31,6 +31,8 @@ public class AlbumController {
     @GetMapping("/albums/artists")
     public ResponseEntity searchArtists(SearchDto searchDto){
         PageInfo<SerachArtistList> artistLists = albumService.searchArtist(searchDto);
+        log.info("원격 저장소에 feature 생성");
+        log.info("stash 테스트");
         return ResponseEntity.ok(artistLists);
     }
 
