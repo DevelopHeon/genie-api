@@ -25,6 +25,7 @@ public class AlbumController {
     public ResponseEntity queryAlbums(SearchDto searchDto){
         PageInfo<AlbumList> albumLists = albumService.findAll(searchDto);
         log.info("git-flow feature branch 생성");
+        log.info("conflict 테스트");
         log.info("merge commit 테스트");
         return ResponseEntity.ok(albumLists);
     }
