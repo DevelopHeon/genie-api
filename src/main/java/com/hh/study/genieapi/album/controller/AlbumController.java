@@ -24,6 +24,7 @@ public class AlbumController {
     @GetMapping("/albums")
     public ResponseEntity queryAlbums(SearchDto searchDto){
         PageInfo<AlbumList> albumLists = albumService.findAll(searchDto);
+        log.info("git-flow feature branch 생성");
         return ResponseEntity.ok(albumLists);
     }
 
