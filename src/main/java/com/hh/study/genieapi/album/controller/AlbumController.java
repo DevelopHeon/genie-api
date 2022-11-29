@@ -25,12 +25,15 @@ public class AlbumController {
     public ResponseEntity queryAlbums(SearchDto searchDto){
         PageInfo<AlbumList> albumLists = albumService.findAll(searchDto);
         log.info("git-flow feature branch 생성");
+        log.info("merge commit 테스트");
         return ResponseEntity.ok(albumLists);
     }
 
     @GetMapping("/albums/artists")
     public ResponseEntity searchArtists(SearchDto searchDto){
         PageInfo<SerachArtistList> artistLists = albumService.searchArtist(searchDto);
+        log.info("원격 저장소에 feature 생성");
+        log.info("stash 테스트");
         return ResponseEntity.ok(artistLists);
     }
 
